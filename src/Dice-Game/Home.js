@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./assets/CSS/Home.css";
 import Dice from "./Dice";
 import GameInfo from "./GameInfo";
+import { connect } from "react-redux";
 class Home extends Component {
   render() {
     return (
@@ -10,7 +11,14 @@ class Home extends Component {
 
         <div className="row text-center mt-5">
           <div className="col-5">
-            <button className="btn btn-outline-primary btnGame">Sic</button>
+            <button
+              className="btn btn-outline-primary btnGame"
+              onClick={() => {
+                this.props.placeABet(true);
+              }}
+            >
+              Sic
+            </button>
           </div>
 
           <div className="col-2">
@@ -18,17 +26,49 @@ class Home extends Component {
           </div>
 
           <div className="col-5">
-            <button className="btn btn-outline-primary btnGame">Bo</button>
+            <button
+              className="btn btn-outline-primary btnGame"
+              onClick={() => {
+                this.props.placeABet(false);
+              }}
+            >
+              Bo
+            </button>
           </div>
         </div>
 
         <div className="gameInfo text-center">
           <GameInfo />
-          <button className="btn btn-success"> Play game</button>
+          <button
+            className="btn btn-success"
+            onClick={() => {
+              this.props.playGame();
+            }}
+          >
+            Play game
+          </button>
         </div>
       </div>
     );
   }
 }
 
-export default Home;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    placeABet: (SicBo) => {
+      let action = {
+        type: "PLACE_A_BET",
+        SicBo,
+      };
+      dispatch(action);
+    },
+
+    playGame: () => {
+      let action = {
+        type: "PLAY_GAME",
+      };
+      dispatch(action);
+    },
+  };
+};
+export default connect(null,mapDispatchToProps)(Home);
